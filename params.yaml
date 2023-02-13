@@ -1,0 +1,29 @@
+base:
+  project: mlops-insurance
+  random_state: 20
+  target_col: charges
+
+data_source:
+  s3_source: source_data/insurance_course5i.csv
+
+load_data:
+  raw_dataset_csv: data/raw/insurance_course5i.csv
+
+split_data:
+  train_path: data/processed/train_insurance_course5i.csv
+  test_path: data/processed/test_insurance_course5i.csv
+  test_size: 0.2
+
+estimators:
+  ElasticNet:
+    params:
+      alpha: 0.9
+      l1_ratio: 0.4
+
+model_dir: models
+
+reports :
+  params: reports/params.json
+  scores: reports/scores.json
+
+webapp_model_dir: prediction_service/model/model.joblib

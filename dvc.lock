@@ -1,0 +1,60 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/load_data.py --config=params.yaml
+    deps:
+    - path: source_data/insurance_course5i.csv
+      md5: 0901b434e74ea2297dc3aa943d12a4f9
+      size: 38036
+    - path: src/get_data.py
+      md5: fa9c8a9e7023b3dd80cd520e8da0caa7
+      size: 697
+    - path: src/load_data.py
+      md5: bc7a42eb22fa3bbf5abae890c33d183b
+      size: 665
+    outs:
+    - path: data/raw/insurance_course5i.csv
+      md5: 0901b434e74ea2297dc3aa943d12a4f9
+      size: 38036
+  split_data:
+    cmd: python src/split_data.py --config=params.yaml
+    deps:
+    - path: data/raw/insurance_course5i.csv
+      md5: 0901b434e74ea2297dc3aa943d12a4f9
+      size: 38036
+    - path: src/split_data.py
+      md5: 5c3b5579179334d1428a03a9320df408
+      size: 1055
+    outs:
+    - path: data/processed/test_insurance_course5i.csv
+      md5: 88da20847c2d57674733e3b68f426b31
+      size: 7629
+    - path: data/processed/train_insurance_course5i.csv
+      md5: d8e7ce2ced447c75307952b14cd53239
+      size: 30451
+  train_and_evaluate:
+    cmd: python src/train_and_evaluate.py --config=params.yaml
+    deps:
+    - path: data/processed/test_insurance_course5i.csv
+      md5: 88da20847c2d57674733e3b68f426b31
+      size: 7629
+    - path: data/processed/train_insurance_course5i.csv
+      md5: d8e7ce2ced447c75307952b14cd53239
+      size: 30451
+    - path: src/train_and_evaluate.py
+      md5: 2a8341da4a2c7cf607218f5de8b94659
+      size: 2422
+    params:
+      params.yaml:
+        estimators.ElasticNet.params.alpha: 0.9
+        estimators.ElasticNet.params.l1_ratio: 0.4
+    outs:
+    - path: models/model.joblib
+      md5: 281c3543fa66ab64a95f7ec9a544180c
+      size: 1087
+    - path: reports/params.json
+      md5: a4aab0167612f21a6085dd05cfafdbf6
+      size: 44
+    - path: reports/scores.json
+      md5: ba9181f8eb266e95ad0c156f91720a9e
+      size: 98
