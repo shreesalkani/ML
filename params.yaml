@@ -27,3 +27,11 @@ reports :
   scores: reports/scores.json
 
 webapp_model_dir: prediction_service/model/model.joblib
+
+
+mlflow_config:
+  artifacts_dir: artifacts
+  experiment_name: ElasticNet_Expense
+  run_name: mlops
+  registered_model_name: ElasticNetMedicalExpenses
+  remote_server_uri: http://127.0.0.1:5000
